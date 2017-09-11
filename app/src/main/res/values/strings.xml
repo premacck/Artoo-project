@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Artoo Project</string>
+    <string name="logo">logo</string>
+    <string name="i_am_a_delivery_agent">I am a Delivery agent</string>
+    <string name="i_am_a_customer">I am a customer</string>
+
+    <dimen name="padding_default">16dp</dimen>
+    <dimen name="padding_double">32dp</dimen>
+    <dimen name="text_heading">24sp</dimen>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="confirm_password">CONFIRM PASSWORD</string>
+    <string name="confirm_password_to_register">Confirm password to register</string>
+    <string name="login_signup">Login/Signup</string>
+    <string name="title_map">Map</string>
+    <string name="logout">Logout</string>
+    <string name="request_delivery">Request delivery</string>
+    <string name="requesting">Requesting…</string>
+    <string name="new_user">New User</string>
+    <string name="password_mismatch">Passwords don\'t match, please try again</string>
+    <string name="permission_granted">Permission granted!</string>
+    <string name="permission_denied">Permission denied</string>
+    <string name="your_food_is_arriving">Your food is arriving…\nClick to confirm</string>
+    <string name="cancel_request">Cancel Request</string>
+    <string name="request_cancelled">Request Cancelled!</string>
+    <string name="cancelling_request">Cancelling request…</string>
+    <string name="cancel_request_confirmation">Are you sure you want to cancel the current delivery request?</string>
+    <string name="confirm_delivery">Confirm Delivery</string>
+    <string name="confirm">CONFIRM</string>
+    <string name="cancel">Cancel</string>
+</resources>

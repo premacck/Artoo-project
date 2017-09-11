@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.prembros.artooproject.MainActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:src="@drawable/logo"
+            android:contentDescription="@string/logo" />
+
+        <Button
+            android:id="@+id/deliveryAgentBtn"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/i_am_a_delivery_agent"
+            android:textSize="16sp"
+            android:layout_margin="16dp"
+            style="@style/AppTheme.RoundedCornerMaterialButton"
+            android:onClick="onDeliveryAgentButtonClick"/>
+
+        <Button
+            android:id="@+id/customerBtn"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="40dp"
+            android:paddingEnd="40dp"
+            android:text="@string/i_am_a_customer"
+            android:textSize="16sp"
+            android:layout_margin="16dp"
+            style="@style/AppTheme.RoundedCornerMaterialButton"
+            android:onClick="onCustomerButtonClick"/>
+
+    </LinearLayout>
+
+</layout>

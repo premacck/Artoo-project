@@ -1,0 +1,58 @@
+{
+  "project_info": {
+    "project_number": "7928508852",
+    "firebase_url": "https://artoo-project.firebaseio.com",
+    "project_id": "artoo-project",
+    "storage_bucket": "artoo-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:7928508852:android:1b35f87571898d92",
+        "android_client_info": {
+          "package_name": "com.prembros.artooproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "7928508852-hhld8p9avop35h1u1d8atm78bbolt7ka.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.prembros.artooproject",
+            "certificate_hash": "1541ff6e67e8c0ebfa6176d1dd3c754e6ab86d7a"
+          }
+        },
+        {
+          "client_id": "7928508852-rq9ctsqkhjfn3d41ej2hups39plhm8sl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBY2QceSVfaZdI8S4WARGN-7TM15c1VVNE"
+        },
+        {
+          "current_key": "AIzaSyCVVBCcUD3zIsObiFbQOnScWolpMvy79Ko"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "7928508852-rq9ctsqkhjfn3d41ej2hups39plhm8sl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

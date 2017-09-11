@@ -1,0 +1,67 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:paddingTop="@dimen/padding_double"
+        tools:context="com.prembros.artooproject.delivery_agent.LoginDeliveryAgent">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_default">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:inputType="textEmailAddress"
+                android:hint="@string/email"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_default">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:inputType="textPassword"
+                android:hint="@string/password"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/login"
+            android:textSize="16sp"
+            android:layout_margin="16dp"
+            style="@style/AppTheme.RoundedCornerMaterialButton"
+            android:onClick="onLoginButtonClick"/>
+
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="40dp"
+            android:paddingEnd="40dp"
+            android:text="@string/new_user"
+            android:textSize="16sp"
+            android:layout_margin="16dp"
+            style="@style/AppTheme.RoundedCornerMaterialButton"
+            android:onClick="onRegisterButtonClick"/>
+
+    </LinearLayout>
+
+</layout>
