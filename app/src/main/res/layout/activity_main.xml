@@ -24,8 +24,10 @@
             android:paddingEnd="16dp"
             android:text="@string/i_am_a_delivery_agent"
             android:textSize="16sp"
-            android:layout_margin="16dp"
+            android:layout_marginTop="@dimen/padding_double"
+            android:textColor="@color/colorPrimary_text"
             style="@style/AppTheme.RoundedCornerMaterialButton"
+            android:foreground="@drawable/ripple"
             android:onClick="onDeliveryAgentButtonClick"/>
 
         <Button
@@ -36,8 +38,10 @@
             android:paddingEnd="40dp"
             android:text="@string/i_am_a_customer"
             android:textSize="16sp"
-            android:layout_margin="16dp"
+            android:layout_marginTop="@dimen/padding_double"
+            android:textColor="@color/colorPrimary_text"
             style="@style/AppTheme.RoundedCornerMaterialButton"
+            android:foreground="@drawable/ripple"
             android:onClick="onCustomerButtonClick"/>
 
     </LinearLayout>

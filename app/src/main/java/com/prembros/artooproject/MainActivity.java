@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int CUSTOMER = 1;
     public static final int DELIVERY_AGENT = 2;
     private static final int REQUEST_CODE = 100;
-    ActivityMainBinding binding;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onResume() {

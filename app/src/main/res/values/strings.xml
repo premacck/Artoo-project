@@ -32,4 +32,8 @@
     <string name="confirm_delivery">Confirm Delivery</string>
     <string name="confirm">CONFIRM</string>
     <string name="cancel">Cancel</string>
+    <string name="routes_taken_today">Routes taken today</string>
+    <string name="reset_tables_at_end_of_day">Reset tables at end of day</string>
+    <string name="no_orders_yet">No orders yet</string>
+    <string name="new_customer_request">New Customer request</string>
 </resources>

@@ -72,6 +72,7 @@ public class CustomerMapActivity extends AppCompatActivity implements OnMapReady
     private Button bottomButton;
     private Button cancelButton;
     private boolean locationUpdatedFlag;
+    private Directions directions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +120,8 @@ public class CustomerMapActivity extends AppCompatActivity implements OnMapReady
                     public void onClick(DialogInterface dialogInterface, int i) {
                         rippleAnimation(CustomerMapActivity.this.findViewById(R.id.reveal_frame_layout));
 
+                        if (directions != null)
+                            directions.removeNavigation();
                         if (geoQuery != null)
                             geoQuery.removeAllListeners();
                         if (agentLocationReference != null)
@@ -169,7 +172,9 @@ public class CustomerMapActivity extends AppCompatActivity implements OnMapReady
     }
 
     public void onFoodRequested(View view) {
+        cancelButton.setVisibility(View.VISIBLE);
         if (bottomButton.getText().toString().equals(String.valueOf(R.string.your_food_is_arriving))) {
+
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.confirm_delivery)
                     .setMessage("Click CONFIRM to confirm the delivery.")
@@ -188,7 +193,6 @@ public class CustomerMapActivity extends AppCompatActivity implements OnMapReady
                     })
                     .show();
         } else {
-            cancelButton.setVisibility(View.VISIBLE);
             FirebaseUser customer = FirebaseAuth.getInstance().getCurrentUser();
             if (customer != null) {
                 String customerUid = customer.getUid();
@@ -340,15 +344,6 @@ public class CustomerMapActivity extends AppCompatActivity implements OnMapReady
         }
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -371,7 +366,7 @@ public class CustomerMapActivity extends AppCompatActivity implements OnMapReady
 
     private void plotNavigation(LatLng origin, LatLng destination) {
         // Getting URL to the Google Directions API
-        Directions directions = new Directions(mMap);
+        directions = new Directions(mMap);
         String url = directions.getDirectionsUrl(origin, destination);
 
         // Start downloading json data from Google Directions API
@@ -410,7 +405,7 @@ public class CustomerMapActivity extends AppCompatActivity implements OnMapReady
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_map_activity, menu);
+        getMenuInflater().inflate(R.menu.menu_map_customer, menu);
         return true;
     }
 
@@ -418,9 +413,6 @@ public class CustomerMapActivity extends AppCompatActivity implements OnMapReady
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                showLogoutDialog();
-                return true;
-            case R.id.action_logout:
                 showLogoutDialog();
                 return true;
             default:

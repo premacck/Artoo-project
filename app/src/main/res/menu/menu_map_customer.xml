@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_route_history"
+        android:title="@string/routes_taken_today"
+        android:icon="@drawable/ic_map"
+        app:showAsAction="always" />
+
+</menu>

@@ -13,6 +13,22 @@
             android:layout_height="match_parent" />
 
         <Button
+            android:visibility="invisible"
+            android:id="@+id/cancel_request_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel_request"
+            android:paddingStart="@dimen/padding_default"
+            android:paddingEnd="@dimen/padding_default"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="16dp"
+            android:textColor="@color/colorPrimary_text"
+            style="@style/AppTheme.RoundedCornerMaterialButton"
+            android:foreground="@drawable/ripple"
+            android:onClick="onRequestDone"/>
+
+        <Button
             android:id="@+id/request_delivery_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,21 +40,10 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_margin="16dp"
+            android:textColor="@color/colorPrimary_text"
             style="@style/AppTheme.RoundedCornerMaterialButton"
+            android:foreground="@drawable/ripple"
             android:onClick="onFoodRequested"/>
-
-        <Button
-            android:id="@+id/cancel_request_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cancel_request"
-            android:paddingStart="@dimen/padding_default"
-            android:paddingEnd="@dimen/padding_default"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_margin="16dp"
-            style="@style/AppTheme.RoundedCornerMaterialButton"
-            android:onClick="onRequestDone"/>
 
         <FrameLayout
             android:elevation="2dp"

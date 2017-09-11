@@ -12,4 +12,6 @@
     <color name="colorSecondary_text">#757575</color>
     <color name="colorIcons">#FFFFFF</color>
     <color name="colorDivider">#BDBDBD</color>
+    <color name="colorRipple">#bb212121</color>
+    <color name="colorPageBackground">#eeeeee</color>
 </resources>

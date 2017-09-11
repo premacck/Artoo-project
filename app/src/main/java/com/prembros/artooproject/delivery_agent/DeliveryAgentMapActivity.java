@@ -1,18 +1,24 @@
 package com.prembros.artooproject.delivery_agent;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.firebase.geofire.GeoFire;
@@ -38,12 +44,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.prembros.artooproject.DatabaseHolder;
 import com.prembros.artooproject.Directions;
 import com.prembros.artooproject.R;
+import com.prembros.artooproject.ResetTablesOnEndOfDay;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.prembros.artooproject.LoginActivity.EXIT_FLAG;
+import static java.util.Calendar.HOUR;
+import static java.util.Calendar.MINUTE;
+import static java.util.Calendar.SECOND;
 
 public class DeliveryAgentMapActivity extends AppCompatActivity implements OnMapReadyCallback,
         ConnectionCallbacks, OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
@@ -57,19 +69,46 @@ public class DeliveryAgentMapActivity extends AppCompatActivity implements OnMap
     private boolean isLoggingOut = false;
     private Location lastLocation;
     private Directions directions;
+    private Directions directions1;
     private boolean locationUpdatedFlag;
+    private boolean routeFlag;
+    private PendingIntent pendingIntent;
+    private Button bottomButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         locationUpdatedFlag = true;
+        routeFlag = true;
         setContentView(R.layout.activity_delivery_agent_map);
+
+        directions = new Directions(mMap);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        bottomButton = (Button) this.findViewById(R.id.confirm_delivery_btn);
         getAssignedCustomer();
+
+        pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, ResetTablesOnEndOfDay.class), 0);
+        if (PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getBoolean("firstStart", true)) {
+            setSchedule();
+        }
+    }
+
+    /**
+     * Reset tables at the end of the day
+     */
+    private void setSchedule() {
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        calendar.set(HOUR, 0);
+        calendar.set(MINUTE, 0);
+        calendar.set(SECOND, 0);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     private void getAssignedCustomer() {
@@ -96,6 +135,51 @@ public class DeliveryAgentMapActivity extends AppCompatActivity implements OnMap
                 */
                 else {
                     endTracking();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void getAssignedCustomerDeliveryLocation() {
+        customerDeliveryLocationReference = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("customerRequest")
+                .child(customerId)
+                .child("l");
+        valueEventListener = customerDeliveryLocationReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists() && !customerId.equals("")) {
+                    //noinspection unchecked
+                    List<Object> list = (List<Object>) dataSnapshot.getValue();
+                    double locationLatitude = 0;
+                    double locationLongitude = 0;
+//                    button.setText("Agent found within " + radius + " Km");
+//                    button.setClickable(false);
+
+                    if (list != null) {
+                        if (list.get(0) != null)
+                            locationLatitude = Double.parseDouble(list.get(0).toString());
+                        if (list.get(1) != null)
+                            locationLongitude = Double.parseDouble(list.get(1).toString());
+                    }
+                    LatLng agentLatLng = new LatLng(locationLatitude, locationLongitude);
+
+                    /*tell the delivery agent where the assigned customer is*/
+                    customerLocationMarker = mMap.addMarker(new MarkerOptions().position(agentLatLng)
+                            .title("Your customer is here")
+                            .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_pin_customer)));
+                    bottomButton.setText(R.string.new_customer_request);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            bottomButton.setText(R.string.confirm_delivery);
+                        }
+                    }, 5000);
                 }
             }
 
@@ -140,57 +224,10 @@ public class DeliveryAgentMapActivity extends AppCompatActivity implements OnMap
                         })
                         .show();
             } else
-                Toast.makeText(this, "You are still too far away from your destination.\nWhy so lazy?", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "You're still far away from your destination.\nWhy so lazy?", Toast.LENGTH_LONG).show();
         }
     }
 
-    private void getAssignedCustomerDeliveryLocation() {
-        customerDeliveryLocationReference = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("customerRequest")
-                .child(customerId)
-                .child("l");
-        valueEventListener = customerDeliveryLocationReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists() && !customerId.equals("")) {
-                    //noinspection unchecked
-                    List<Object> list = (List<Object>) dataSnapshot.getValue();
-                    double locationLatitude = 0;
-                    double locationLongitude = 0;
-//                    button.setText("Agent found within " + radius + " Km");
-//                    button.setClickable(false);
-
-                    if (list != null) {
-                        if (list.get(0) != null)
-                            locationLatitude = Double.parseDouble(list.get(0).toString());
-                        if (list.get(1) != null)
-                            locationLongitude = Double.parseDouble(list.get(1).toString());
-                    }
-                    LatLng agentLatLng = new LatLng(locationLatitude, locationLongitude);
-
-                    /*tell the delivery agent where the assigned customer is*/
-                    customerLocationMarker = mMap.addMarker(new MarkerOptions().position(agentLatLng)
-                            .title("Your customer is here")
-                            .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_pin_customer)));
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-    }
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -213,13 +250,20 @@ public class DeliveryAgentMapActivity extends AppCompatActivity implements OnMap
 
     private void plotNavigation(LatLng origin, LatLng destination) {
         // Getting URL to the Google Directions API
-        directions = new Directions(mMap);
-        String url = directions.getDirectionsUrl(origin, destination);
+        String directionsUrl = directions.getDirectionsUrl(origin, destination);
 
         directions.removeNavigation();
+        if (directions1 != null)
+            directions1.removeNavigation();
 
         // Start downloading json data from Google Directions API
-        directions.executeDownloadTask(url);
+        directions.executeDownloadTask(directionsUrl);
+
+        // Insert direction URL in SQLite database
+        final DatabaseHolder db = new DatabaseHolder(this);
+        db.open();
+        db.insertInRoutesTable(directionsUrl);
+        db.close();
     }
 
     @Override
@@ -285,22 +329,45 @@ public class DeliveryAgentMapActivity extends AppCompatActivity implements OnMap
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_map_activity, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 showLogoutDialog();
                 return true;
-            case R.id.action_logout:
-                showLogoutDialog();
+            case R.id.action_route_history:
+                toggleRouteHistory();
                 return true;
             default:
                 return false;
+        }
+    }
+
+    private void toggleRouteHistory() {
+        if (routeFlag) {
+            routeFlag = false;
+            final DatabaseHolder db = new DatabaseHolder(this);
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    db.open();
+                    ArrayList<String> allRoutesList = db.returnRoutes();
+                    db.close();
+                    if (!allRoutesList.isEmpty()) {
+                        directions.removeNavigation();
+                        directions1 = new Directions(mMap);
+                        for (String url : allRoutesList) {
+                            directions1.executeDownloadTask(url);
+                        }
+                    } else
+                        Toast.makeText(DeliveryAgentMapActivity.this, "No routes found/taken", Toast.LENGTH_SHORT).show();
+                }
+            });
+            bottomButton.setVisibility(View.GONE);
+        } else {
+            routeFlag = true;
+            directions1.removeNavigation();
+            plotNavigation(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()), customerLocationMarker.getPosition());
+            bottomButton.setVisibility(View.VISIBLE);
         }
     }
 
