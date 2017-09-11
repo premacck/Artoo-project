@@ -94,11 +94,10 @@ public class Directions {
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
             ArrayList<LatLng> points;
-            PolylineOptions lineOptions = null;
+            PolylineOptions lineOptions = new PolylineOptions();
 
             for (int i = 0; i < result.size(); i++) {
                 points = new ArrayList<>();
-                lineOptions = new PolylineOptions();
 
                 List<HashMap<String, String>> path = result.get(i);
 

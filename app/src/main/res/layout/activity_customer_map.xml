@@ -13,7 +13,7 @@
             android:layout_height="match_parent" />
 
         <Button
-            android:id="@+id/request_pickup_btn"
+            android:id="@+id/request_delivery_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="250dp"

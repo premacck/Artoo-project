@@ -95,38 +95,46 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginButtonClick(View view) {
-        firebaseAuth.signInWithEmailAndPassword(binding.email.getText().toString(), binding.password.getText().toString())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this, "Login failed!", Toast.LENGTH_SHORT).show();
+        if (!binding.email.getText().toString().isEmpty() && !binding.password.getText().toString().isEmpty()) {
+            firebaseAuth.signInWithEmailAndPassword(binding.email.getText().toString(), binding.password.getText().toString())
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (!task.isSuccessful()) {
+                                Toast.makeText(LoginActivity.this, "Login failed!", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+        } else {
+            Toast.makeText(this, "Please enter your email and password first", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void onRegisterButtonClick(View view) {
-        View view1 = getLayoutInflater().inflate(R.layout.confirm_password, null);
-        final TextInputEditText confirmPasswordEditText = view1.findViewById(R.id.confirm_password);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        confirmPasswordEditText.requestFocus();
-        imm.showSoftInput(confirmPasswordEditText, InputMethodManager.SHOW_IMPLICIT);
-        builder.setView(view1)
-                .setPositiveButton("Register", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        onRegisterConfirmed(confirmPasswordEditText.getText().toString());
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
-                .show();
+        if (!binding.email.getText().toString().isEmpty() && !binding.password.getText().toString().isEmpty()) {
+            View view1 = getLayoutInflater().inflate(R.layout.confirm_password, null);
+            final TextInputEditText confirmPasswordEditText = view1.findViewById(R.id.confirm_password);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            confirmPasswordEditText.requestFocus();
+            imm.showSoftInput(confirmPasswordEditText, InputMethodManager.SHOW_IMPLICIT);
+            builder.setView(view1)
+                    .setPositiveButton("Register", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            onRegisterConfirmed(confirmPasswordEditText.getText().toString());
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .show();
+        } else {
+            Toast.makeText(this, "Please enter your email and password first", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void onRegisterConfirmed(String confirmedPassword) {

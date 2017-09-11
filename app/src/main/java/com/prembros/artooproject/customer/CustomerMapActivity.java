@@ -71,11 +71,13 @@ public class CustomerMapActivity extends AppCompatActivity implements OnMapReady
     private ValueEventListener agentLocationReferenceListener;
     private Button bottomButton;
     private Button cancelButton;
+    private boolean locationUpdatedFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_map);
+        locationUpdatedFlag = true;
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -83,6 +85,7 @@ public class CustomerMapActivity extends AppCompatActivity implements OnMapReady
         mapFragment.getMapAsync(this);
 
         cancelButton = (Button) this.findViewById(R.id.cancel_request_btn);
+        bottomButton = (Button) this.findViewById(R.id.request_delivery_btn);
 
 //        binding = DataBindingUtil.setContentView(this, R.layout.activity_customer_map);
     }
@@ -199,7 +202,6 @@ public class CustomerMapActivity extends AppCompatActivity implements OnMapReady
                         .title("You are here")
                         .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_pin_customer)));
 
-                bottomButton = ((Button) view);
                 bottomButton.setText(R.string.requesting);
                 getNearestAgent();
             }
@@ -330,7 +332,8 @@ public class CustomerMapActivity extends AppCompatActivity implements OnMapReady
             builder.include(agentsMarker.getPosition());
             LatLngBounds latLngBounds = builder.build();
             mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 400));
-        } else if (currentMarker != null) {
+        } else if (currentMarker != null && locationUpdatedFlag) {
+            locationUpdatedFlag = false;
             LatLng latLng = new LatLng(currentMarker.getPosition().latitude, currentMarker.getPosition().longitude);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(15));

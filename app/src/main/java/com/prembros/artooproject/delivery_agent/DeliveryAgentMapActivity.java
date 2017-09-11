@@ -57,10 +57,12 @@ public class DeliveryAgentMapActivity extends AppCompatActivity implements OnMap
     private boolean isLoggingOut = false;
     private Location lastLocation;
     private Directions directions;
+    private boolean locationUpdatedFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        locationUpdatedFlag = true;
         setContentView(R.layout.activity_delivery_agent_map);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -109,7 +111,8 @@ public class DeliveryAgentMapActivity extends AppCompatActivity implements OnMap
             customerLocationMarker.remove();
         if (customerDeliveryLocationReference != null)
             customerDeliveryLocationReference.removeEventListener(valueEventListener);
-        directions.removeNavigation();
+        if (directions != null)
+            directions.removeNavigation();
     }
 
     public void confirmDelivery(View view) {
@@ -224,8 +227,11 @@ public class DeliveryAgentMapActivity extends AppCompatActivity implements OnMap
         lastLocation = location;
 
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
+        if (locationUpdatedFlag) {
+            locationUpdatedFlag = false;
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
+        }
 
         /*Updating database through GeoFire*/
         FirebaseUser deliveryAgent = FirebaseAuth.getInstance().getCurrentUser();
