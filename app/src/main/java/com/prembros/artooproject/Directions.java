@@ -118,7 +118,8 @@ public class Directions {
             }
 
             // Drawing polyline in the Google Map for the i-th route
-            polyline = mMap.addPolyline(lineOptions);
+            if (polyline != null)
+                polyline = mMap.addPolyline(lineOptions);
         }
     }
 

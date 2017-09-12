@@ -122,6 +122,7 @@ public class CustomerMapActivity extends AppCompatActivity implements OnMapReady
 
                         if (directions != null)
                             directions.removeNavigation();
+                        directions = null;
                         if (geoQuery != null)
                             geoQuery.removeAllListeners();
                         if (agentLocationReference != null)
@@ -146,7 +147,6 @@ public class CustomerMapActivity extends AppCompatActivity implements OnMapReady
                             agentReference.setValue(true);
                             foundAgentId = null;
                         }
-                        bottomButton.setClickable(true);
                         isAgentFound = false;
                         radius = 1;
                         if (agentMarker != null)
@@ -286,7 +286,6 @@ public class CustomerMapActivity extends AppCompatActivity implements OnMapReady
                     List<Object> map = (List<Object>) dataSnapshot.getValue();
                     double locationLatitude = 0;
                     double locationLongitude = 0;
-                    bottomButton.setClickable(false);
 
                     if (map != null) {
                         if (map.get(0) != null)
